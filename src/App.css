@@ -1,0 +1,20 @@
+/* Optional Custom Styling */
+/* Set global font, background, and text color */
+body {
+  background-color: gray;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure all elements inherit box-sizing */
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+/* Use :root for CSS variables or container properties if needed */
+:root {
+  box-sizing: border-box;
+}
