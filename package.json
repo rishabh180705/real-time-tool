@@ -13,7 +13,7 @@
     "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.1.11",
     "autoprefixer": "^10.4.21",
-    "fabric": "^5.5.1",
+    "fabric": "^6.7.1",
     "framer-motion": "^12.23.3",
     "lucide-react": "^0.525.0",
     "postcss": "^8.5.6",
