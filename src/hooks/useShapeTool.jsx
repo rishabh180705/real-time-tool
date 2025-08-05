@@ -24,7 +24,7 @@ export const useShapeTool = (canvas, tool, options) => {
         left: x,
         top: y,
         fill: options.fill || 'rgba(0,0,255,0.1)',
-        stroke: options.stroke || 'black',
+        stroke: options.fill || 'black',
         strokeWidth: options.strokeWidth || 2,
         originX: 'left',
         originY: 'top',

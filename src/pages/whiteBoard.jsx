@@ -1,31 +1,41 @@
-import React, { useRef, useState, useEffect, use } from 'react';
+import React, { useRef, useState, useEffect, useContext, use } from 'react';
 import { Canvas, Rect } from 'fabric';
 import { Tools } from '../component/tools';
 import { useShapeTool } from '../hooks/useShapeTool';
 import { useFreeDrawTool } from '../hooks/useFreeDrawTool';
 import { usePanTool } from '../hooks/usePanTool';
-
+import { StoreContext } from '../context/storeContext';
+import { useArrowTool } from '../hooks/useArrowTool';
+import TeamChatBox from '../component/chatBox';
 
 export default function WhiteBoard() {
   const canvasRef = useRef(null);
   const [canvas, setCanvas] = useState(null);
   const [selectedTool, setTool] = useState('');
-  const [background, setBackgroundColor] = useState('#000'); // Default background color
+
+
+
   const history = useRef([]);
   const redoStack = useRef([]);
   const [zoom, setZoom] = useState(1);
+   const {  opacity, 
+    strokeWidth, 
+     fillColor,
+          strokeColor,    background,
+    setBackgroundColor,} = useContext(StoreContext);
 
   const options = { 
-    stroke: '#ffffff', 
-    fill: 'rgba(0, 0, 255, 0.1)', 
-    strokeWidth: 2 
+    stroke: strokeColor || '#000', // Default stroke color
+    opacity: opacity / 100, // Convert to fraction for Fabric.js
+    fill: fillColor || 'rgba(0, 0, 255, 0.1)', // Default fill color
+    strokeWidth : strokeWidth || 2,
   };
 
   // hooks..
     usePanTool(canvas, selectedTool === 'Hand');
     useShapeTool(canvas, selectedTool, options);
     useFreeDrawTool(canvas, selectedTool, options);
-  
+    useArrowTool(canvas, selectedTool, options);
  
   useEffect(() => {
     if (canvasRef.current) {
@@ -75,15 +85,16 @@ export default function WhiteBoard() {
     const handleResize = () => {
       if (canvas) {
         canvas.setDimensions({
-          width: window.innerWidth * 0.9,
-          height: window.innerHeight * 0.9,
+          width: window.innerWidth * 0.95,
+          height: window.innerHeight * 0.95,
         });
-        canvas.backgroundColor = background;
+        canvas.setBackgroundColor(background), // Update background color on resize
+        canvas.renderAll();
       }
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, [canvas,setBackgroundColor]);
+  }, [canvas,setBackgroundColor, background]);
 
   useEffect(() => {
   if (canvas) {
@@ -101,11 +112,28 @@ export default function WhiteBoard() {
       style={{ width: '100%', height: '100vh', position: 'relative', backgroundColor: background }}
     >
       <Tools canvas={canvas} setTool={setTool} history={history} redoStack={redoStack} />
+    
+
+
+     
+
+      {/* Canvas Element */}
+
+
+
       <canvas
         ref={canvasRef} 
-        className="border-4 border-white w-11/12 h-11/12 overflow-visible"
-        // style={{ backgroundColor: background }}
+        className="border-4 border-black  w-11/12 h-11/12 overflow-visible"
+
+  style={{
+          borderColor: background === '#000' ? '#fff' : '#000',
+          borderStyle: 'solid',
+          borderWidth: '2px',
+        }}
+
       />
+      <TeamChatBox/>
+      {/* Settings Component */}
       {/* <ElementSettings canvas={canvas} /> */}
     
     </div>
